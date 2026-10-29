@@ -106,6 +106,11 @@ def main():
         page = browser.new_page(viewport={"width": 1280, "height": 900}, locale="en-US")
         try:
             hits = find_showing(page)
+        except PWTimeout:
+            print(f"Page did not load as expected. URL: {page.url}  Title: {page.title()!r}")
+            print("Page text:", " ".join(page.inner_text("body").split())[:800])
+            page.screenshot(path="failure.png", full_page=True)
+            raise
         finally:
             browser.close()
 

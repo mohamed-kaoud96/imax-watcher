@@ -41,6 +41,14 @@ jobs:
           NTFY_TOPIC: ${{ secrets.NTFY_TOPIC }}
         run: python watch.py
 
+      - name: Keep the screenshot of a failed check
+        if: failure()
+        uses: actions/upload-artifact@v4
+        with:
+          name: failure-screenshot
+          path: failure.png
+          if-no-files-found: ignore
+
       - name: Stop watching once found
         if: steps.watch.outputs.found == 'true'
         env:
